@@ -1,0 +1,29 @@
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.81 hPa
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.81 hPa
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.79 hPa
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.75 hPa
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.68 hPa
+CO2: 1037 ppm, Humidity: 50.6 %, Temperature: 26.3 °C
+Temperature: 24.1 °C, Pressure: 998.77 hPa
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.75 hPa
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.73 hPa
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.74 hPa
+CO2: 1012 ppm, Humidity: 51.7 %, Temperature: 25.9 °C
+Temperature: 24.1 °C, Pressure: 998.8 hPa
+SCD41: no new data available
+Temperature: 24.0 °C, Pressure: 998.7 hPa
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.81 hPa
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.75 hPa
+SCD41: no new data available
+Temperature: 24.1 °C, Pressure: 998.8 hPa
+CO2: 1003 ppm, Humidity: 52.5 %, Temperature: 25.7 °C

@@ -24,10 +24,10 @@ def main():
                 co2 = (raw_measurement[0] << 8) | raw_measurement[1]
 
                 raw_temperature = (raw_measurement[3] << 8) | raw_measurement[4]
-                temperature = -45 + 175 * (raw_temperature / 2 ** 16)
+                temperature = round(-45 + 175 * (raw_temperature / (2 ** 16 - 1)), 1)
 
                 raw_humidity = (raw_measurement[6] << 8) | raw_measurement[7]
-                humidity = 100 * (raw_humidity / 2 ** 16)
+                humidity = round(100 * (raw_humidity / (2 ** 16 - 1)), 1)
 
                 print(f"CO2: {co2} ppm, Humidity: {humidity} %, Temperature: {temperature} °C")
         else:
@@ -101,7 +101,6 @@ def bmp180_read_coefficients(i2c)-> Bytes:
     i2c.writeto(BMP180_I2C_ADDRESS, bmp180_coef_reg_base, False)
     coefs = i2c.readfrom(BMP180_I2C_ADDRESS, bmp180_coef_size)
 
-    print(f"bmp coefficients: {coefs=}")
     return coefs
 
 def bmp180_perform_measurement(i2c, command: Bytes, ms: int) -> Bytes :
@@ -113,7 +112,6 @@ def bmp180_perform_measurement(i2c, command: Bytes, ms: int) -> Bytes :
     i2c.writeto(BMP180_I2C_ADDRESS, bmp180_reg_out_msb, False)
     out = i2c.readfrom(BMP180_I2C_ADDRESS, 3)
 
-    print(f"raw output: {[hex(x) for x in out]}")
     return out
 
 def bmp180_read_temperature(i2c)->int:
@@ -129,7 +127,6 @@ def bmp180_read_pressure(i2c)->int:
 def compute(coef, raw_temp, raw_press):
     #this is horrible, but it is what the spec sheet says you should do
     #first, let's parse our coefficients
-    print("data computation")
 
     #int.from_bytes exists, but more limited to struct
     #UT = int.from_bytes(raw_temp, 'big', True)
@@ -153,17 +150,11 @@ def compute(coef, raw_temp, raw_press):
     MC = unpack_from(">h", coef, 18)[0]
     MD = unpack_from(">h", coef, 20)[0]
 
-    print(f"{UT=}, {UP=}")
-    print(f"{AC1=}, {AC2=}, {AC3=}, {AC4=}, {AC5=}, {AC6=}")
-    print(f"{B1=}, {B2=}, {MB=}, {MC=}, {MD=}")
-
     #compute temperature
     X1 = (UT - AC6) * AC5 // 0x8000
     X2 = MC * 0x0800 // (X1 + MD)
     B5 = X1 + X2
     T = (B5 + 8) // 0x0010
-    #T is in 0.1C units
-    print(f"measured temperature: {T / 10} ")
 
     #compute pressure
     B6 = B5 - 4000
@@ -187,7 +178,7 @@ def compute(coef, raw_temp, raw_press):
     X2 = (-7357 * p) // (1 << 16)
     p = p + (X1 + X2 + 3791) // 16
 
-    print(f"measured air pressure: {p/100} hPa")
+    print(f"Temperature: {T / 10} °C, Pressure: {p / 100} hPa")
 
 bmp180_read_chip_id(i2c)
 coef = bmp180_read_coefficients(i2c)
