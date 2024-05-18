@@ -18,6 +18,9 @@ def main():
     print("SCD41: initialization finished")
 
     while True:
+        for i in range(15, 0, -1):
+            print(i)
+            time.sleep(1)
         if scd41_get_data_ready_status():
             raw_measurement = scd41_read_measurement()
             if scd41_is_data_crc_correct(raw_measurement):
@@ -29,15 +32,13 @@ def main():
                 raw_humidity = (raw_measurement[6] << 8) | raw_measurement[7]
                 humidity = round(100 * (raw_humidity / (2 ** 16 - 1)), 1)
 
-                print(f"CO2: {co2} ppm, Humidity: {humidity} %, Temperature: {temperature} °C")
+                print(f"SCD41: CO2: {co2} ppm, Humidity: {humidity} %, Temperature: {temperature} °C")
         else:
             print("SCD41: no new data available")
 
         raw_temperature = bmp180_read_temperature(i2c)
         raw_pressure = bmp180_read_pressure(i2c)
         compute(coef, raw_temperature, raw_pressure)
-
-        time.sleep(1)
 
 def scd41_start_periodic_measurement():
     write_buffer = bytearray([0x21, 0xb1])
@@ -178,7 +179,7 @@ def compute(coef, raw_temp, raw_press):
     X2 = (-7357 * p) // (1 << 16)
     p = p + (X1 + X2 + 3791) // 16
 
-    print(f"Temperature: {T / 10} °C, Pressure: {p / 100} hPa")
+    print(f"BMP180: Temperature: {T / 10} °C, Pressure: {p / 100} hPa")
 
 bmp180_read_chip_id(i2c)
 coef = bmp180_read_coefficients(i2c)
